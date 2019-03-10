@@ -469,6 +469,19 @@ namespace SadConsole
             return this;
         }
 
+
+        /// <summary>
+        /// Moves the cursor to the specified position.
+        /// </summary>
+        /// <param name="x">The x (horizontal) of the position.</param>
+        /// <param name="y">The x (vertical) of the position.</param>
+        /// <returns></returns>
+        public Cursor Move(int x, int y)
+        {
+            Position = new Point(x, y);
+            return this;
+        }
+
         /// <summary>
         /// Moves the cusor up by the specified amount of lines.
         /// </summary>
@@ -625,6 +638,12 @@ namespace SadConsole
                         case Keys.F10:
                         case Keys.F11:
                         case Keys.F12:
+                        case Keys.CapsLock:
+                        case Keys.NumLock:
+                        case Keys.PageUp:
+                        case Keys.PageDown:
+                        case Keys.Home:
+                        case Keys.End:
                         case Keys.LeftShift:
                         case Keys.RightShift:
                         case Keys.LeftAlt:

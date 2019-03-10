@@ -1,4 +1,26 @@
-﻿## 02/24/2019 V8.0
+﻿## 03/09/2019 V8.3.0
+
+- `Cursor.Move` now has an overload for `int x, int y`.
+- The `Global.CurrentScreen` defaults to a new `Console` instead of a `ContainerConsole`.
+- `Settings.ResizeMode` now supports `None` which helps the dynamic console scenario.
+
+## 03/01/2019 V8.2.0
+
+- Fixed a bug in `WindowTheme.Clone`
+- Trimmed Cell.Decorators memory usage
+- Various Decorator bugs.
+- Added `surface.ClearDecorators`
+
+## 02/27/2019 V8.1.0
+
+- Reenabled `Control.AlternativeFont`
+- Rebuilt repo structure
+- NuGet package supports **.snuget** and **SourceLink**
+- Rectangle extensions added: `ToPixels`, `ToConsole`
+- Keyboard methods like IsKeyPressed now ignore SHIFT and support checking AsciiKey for SHIFT state
+- CAPSLOCK and NUMLOCK no longer use windows dll
+
+## 02/24/2019 V8.0
 Special thanks to the SadConsole Discord on all the feedback provided.
 Shout to the GoRogue project.
 

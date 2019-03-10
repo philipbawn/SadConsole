@@ -210,7 +210,7 @@ namespace SadConsole
             Cells[index].Foreground = foreground;
             Cells[index].Glyph = glyph;
             Cells[index].Mirror = mirror;
-            Cells[index].Decorators = decorators != null ? decorators.ToArray() : new CellDecorator[0];
+            Cells[index].Decorators = decorators?.ToArray() ?? Array.Empty<CellDecorator>();
 
             IsDirty = true;
         }
@@ -405,7 +405,9 @@ namespace SadConsole
         /// <param name="decorators">The decorators. Use <code>null</code> to clear.</param>
         public void SetDecorator(int x, int y, int count, params CellDecorator[] decorators)
         {
-            if (!IsValidCell(x, y, out var index) || index + count >= Cells.Length) return;
+            if (count <= 0) return;
+            if (!IsValidCell(x, y, out var index)) return;
+            if (index + count > Cells.Length) count = Cells.Length - index;
 
             SetDecorator(index, count, decorators);
         }
@@ -418,30 +420,22 @@ namespace SadConsole
         /// <param name="decorators">The decorators. Use <code>null</code> to clear.</param>
         public void SetDecorator(int index, int count, params CellDecorator[] decorators)
         {
-            // TODO: Setting decorators to an empty array causes a lot of GC when you FILL/CLEAR a surface. Need a better way
-            if (!IsValidCell(index) || index + count >= Cells.Length) return;
-            
+            if (count <= 0) return;
+            if (!IsValidCell(index)) return;
+            if (index + count > Cells.Length) count = Cells.Length - index;
+
+            if (decorators != null && decorators.Length == 0)
+                decorators = null;
+
             for (var i = index; i < index + count; i++)
             {
-                switch (decorators)
-                {
-                    case null when Cells[i].Decorators.Length != 0:
-                        Cells[i].Decorators = new CellDecorator[0];
-                        break;
-
-                    case null:
-                        continue;
-
-                    default:
-                    {
-                        if (decorators.Length != 0)
-                            Cells[i].Decorators = (CellDecorator[])decorators.Clone();
-                        else if (Cells[i].Decorators.Length != 0)
-                            Cells[i].Decorators = new CellDecorator[0];
-                        break;
-                    }
-                }
+                if (decorators == null)
+                    Cells[i].Decorators = Array.Empty<CellDecorator>();
+                else
+                    Cells[i].Decorators = (CellDecorator[])decorators.Clone();
             }
+
+            IsDirty = true;
         }
 
         /// <summary>
@@ -451,9 +445,11 @@ namespace SadConsole
         /// <param name="y">The y coordinate of the cell.</param>
         /// <param name="count">The count of cells to use from the x,y coordinate (inclusive).</param>
         /// <param name="decorators">The decorators. Use <code>null</code> to clear.</param>
-        public void AddDecorator(int x, int y, int count, CellDecorator[] decorators)
+        public void AddDecorator(int x, int y, int count, params CellDecorator[] decorators)
         {
-            if (!IsValidCell(x, y, out var index) || index + count >= Cells.Length) return;
+            if (count <= 0) return;
+            if (!IsValidCell(x, y, out var index)) return;
+            if (index + count > Cells.Length) count = Cells.Length - index;
 
             AddDecorator(index, count, decorators);
         }
@@ -464,16 +460,37 @@ namespace SadConsole
         /// <param name="index">The index of the cell to start applying.</param>
         /// <param name="count">The count of cells to use from the index (inclusive).</param>
         /// <param name="decorators">The decorators. If <code>null</code>, does nothing.</param>
-        public void AddDecorator(int index, int count, CellDecorator[] decorators)
+        public void AddDecorator(int index, int count, params CellDecorator[] decorators)
         {
-            if (!IsValidCell(index) || index + count >= Cells.Length) return;
+            if (count <= 0) return;
+            if (!IsValidCell(index)) return;
+            if (index + count > Cells.Length) count = Cells.Length - index;
 
             if (decorators == null || decorators.Length == 0)
                 return;
 
             for (var i = index; i < index + count; i++)
                 Cells[i].Decorators = Cells[i].Decorators.Union(decorators).Distinct().ToArray();
+
+            IsDirty = true;
         }
+
+        /// <summary>
+        /// Clears the decorators of the specified cells.
+        /// </summary>
+        /// <param name="x">The x coordinate of the cell.</param>
+        /// <param name="y">The y coordinate of the cell.</param>
+        /// <param name="count">The count of cells to use from the x,y coordinate (inclusive).</param>
+        public void ClearDecorators(int x, int y, int count) 
+            => SetDecorator(x, y, count, null);
+
+        /// <summary>
+        /// Clears the decorators of the specified cells.
+        /// </summary>
+        /// <param name="index">The index of the cell to start applying.</param>
+        /// <param name="count">The count of cells to use from the index (inclusive).</param>
+        public void ClearDecorators(int index, int count)
+            => SetDecorator(index, count, null);
 
         /// <summary>
         /// Draws the string on the console at the specified location, wrapping if needed.
