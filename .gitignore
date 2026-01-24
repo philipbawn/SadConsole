@@ -51,12 +51,13 @@ build/
 [Bb]in/
 [Oo]bj/
 [Pp]ackages/
+experiments/
 
 !/FNA/library/[dD]ebug/
 !/FNA/library/[rR]elease/
 !/FNA/dependencies/x64/
 !/FNA/library/[dD]ebug/
-!/src/SadConsole.Shared/[dD]ebug/
+!/SadConsole.Debug.MonoGame/[dD]ebug/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
@@ -229,3 +230,8 @@ pip-log.txt
 
 .vs/
 releases/
+nuget/
+.vscode/
+/Fonts/MRMOTEXTEX_dont_check_in.zip
+/.idea
+/Editor/Properties/launchSettings.json
