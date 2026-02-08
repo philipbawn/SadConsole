@@ -235,3 +235,5 @@ nuget/
 /Fonts/MRMOTEXTEX_dont_check_in.zip
 /.idea
 /Editor/Properties/launchSettings.json
+
+templates/template_code/SadConsole.Examples.Demo.CSharp/.claude/settings.local.json
