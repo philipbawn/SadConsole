@@ -9,10 +9,10 @@
       ],
       "rollForward": false
     },
-    "dotnet-mgcb-compute": {
-      "version": "3.8.3",
+    "dotnet-mgcb": {
+      "version": "3.8.1.303",
       "commands": [
-        "mgcb-compute"
+        "mgcb"
       ],
       "rollForward": false
     }
