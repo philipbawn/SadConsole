@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>SadConsole.Examples</RootNamespace>
@@ -18,7 +18,7 @@
   <PropertyGroup>
     <!-- Choose which game host you want to use, monogame, sfml, or fna. -->
     <!-- FNA host requires you to manually add the FNA DLLs -->
-    <GameHost>sfml</GameHost>
+    <GameHost>monogame</GameHost>
     
     <!-- Some constants for your game that can detect monogame, sfml, or FNA. -->
     <DefineConstants Condition=" '$(GameHost)' == 'monogame' ">$(DefineConstants);MONOGAME</DefineConstants>
@@ -37,13 +37,13 @@
   <!-- MonoGame host requires you to choose which library you want to use. -->
   <!-- If you're using SFML, you don't need to add the sfml library as SadConsole adds it for you. -->
   <ItemGroup Condition=" '$(GameHost)' == 'monogame' ">
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.4.1" />
+    <PackageReference Include="MonoGame.Framework.Compute.DesktopGL" Version="3.8.3" />
 
-    <!-- If you want to use DirectX, you must set the <TargetFramework> to net8.0-windows and change the MonoGame reference -->
+    <!-- If you want to use DirectX, you must set the <TargetFramework> to net10.0-windows and change the MonoGame reference -->
     <!--<PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.4.1" />-->
 
-    <!-- Compile the MonoGame Shaders -->
-    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.4.1" />
+    <!-- Compile the MonoGame Shaders (uses ShaderConductor - no Wine needed on Linux) -->
+    <PackageReference Include="MonoGame.Content.Builder.Task.Compute" Version="3.8.3" />
     <MonoGameContentReference Include="Content\Assets.mgcb" />
     <None Remove="Content\bin\**\*" />
     <None Remove="Content\obj\**\*" />
@@ -53,7 +53,7 @@
   <!-- If you're using the FNA host, set this path to the FNA.dll file. -->
   <ItemGroup Condition=" '$(GameHost)' == 'fna' ">
     <Reference Include="FNA">
-      <HintPath>bin\net8.0\FNA.dll</HintPath>
+      <HintPath>bin\net10.0\FNA.dll</HintPath>
     </Reference>
   </ItemGroup>
 

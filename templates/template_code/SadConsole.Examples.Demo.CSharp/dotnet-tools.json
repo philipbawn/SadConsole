@@ -2,10 +2,10 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "dotnet-mgcb": {
-      "version": "3.8.1.303",
+    "dotnet-mgcb-compute": {
+      "version": "3.8.3",
       "commands": [
-        "mgcb"
+        "mgcb-compute"
       ],
       "rollForward": false
     }

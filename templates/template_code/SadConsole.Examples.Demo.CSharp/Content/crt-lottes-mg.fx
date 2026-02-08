@@ -1,11 +1,9 @@
-﻿#if OPENGL
-	#define SV_POSITION POSITION
-	#define VS_SHADERMODEL vs_3_0
-	#define PS_SHADERMODEL ps_3_0
+#if OPENGL
+	#define VS_SHADERMODEL vs_4_0
+	#define PS_SHADERMODEL ps_4_0
 #else
 	#define VS_SHADERMODEL vs_4_0_level_9_1
 	#define PS_SHADERMODEL ps_4_0_level_9_1
-	#define HLSL_4
 #endif
 
 struct VertexShaderOutput
@@ -70,11 +68,8 @@ float2 outputSize;
 
 // ------------- //
 
-Texture2D decal;
-sampler2D DecalSampler = sampler_state
-{
-	Texture = <decal>;
-};
+Texture2D decal : register(t0);
+SamplerState DecalSampler : register(s0);
 
 float4x4 modelViewProj;
 
@@ -130,9 +125,9 @@ float3 ToSrgb(float3 c)
 float3 Fetch(float2 pos, float2 off, float2 texture_size){
   pos=(floor(pos*texture_size.xy+off)+float2(0.5,0.5))/texture_size.xy;
 #ifdef SIMPLE_LINEAR_GAMMA
-  return ToLinear(brightboost * pow(tex2D(DecalSampler,pos.xy).rgb, 2.2));
+  return ToLinear(brightboost * pow(decal.Sample(DecalSampler,pos.xy).rgb, 2.2));
 #else
-  return ToLinear(brightboost * tex2D(DecalSampler,pos.xy).rgb);
+  return ToLinear(brightboost * decal.Sample(DecalSampler,pos.xy).rgb);
 #endif
 }
 
@@ -287,7 +282,7 @@ float3 Mask(float2 pos){
   return mask;
 }    
 
-float4 crt_lottes(float2 texture_size, float2 video_size, float2 output_size, float2 tex, sampler2D s0)
+float4 crt_lottes(float2 texture_size, float2 video_size, float2 output_size, float2 tex)
 {
   float2 pos=Warp(tex.xy*(texture_size.xy/video_size.xy))*(video_size.xy/texture_size.xy);
   float3 outColor = Tri(pos, texture_size);
@@ -303,9 +298,9 @@ float4 crt_lottes(float2 texture_size, float2 video_size, float2 output_size, fl
   return float4(ToSrgb(outColor.rgb),1.0);
 }
 
-float4 main_fragment(VertexShaderOutput VOUT) : COLOR0
+float4 main_fragment(VertexShaderOutput VOUT) : SV_TARGET
 {
-	return crt_lottes(textureSize, videoSize, outputSize, VOUT.texCoord, DecalSampler);
+	return crt_lottes(textureSize, videoSize, outputSize, VOUT.texCoord);
 }
 
 technique
