@@ -133,7 +133,7 @@ float3 Fetch(float2 pos, float2 off, float2 texture_size){
 
 // Distance in emulated pixels to nearest texel.
 float2 Dist(float2 pos, float2 texture_size){pos=pos*texture_size.xy;return -(frac(pos)-float2(0.5, 0.5));}
-    
+
 // 1D Gaussian.
 float Gaus(float pos,float scale){return exp2(scale*pow(abs(pos),shape));}
 
@@ -150,7 +150,7 @@ float3 Horz3(float2 pos, float off, float2 texture_size){
   float wd=Gaus(dst+1.0,scale);
   // Return filtered sample.
   return (b*wb+c*wc+d*wd)/(wb+wc+wd);}
-  
+
 // 5-tap Gaussian filter along horz line.
 float3 Horz5(float2 pos, float off, float2 texture_size){
   float3 a=Fetch(pos,float2(-2.0,off),texture_size);
@@ -195,7 +195,7 @@ float3 Horz7(float2 pos, float off, float2 texture_size){
 float Scan(float2 pos,float off, float2 texture_size){
   float dst=Dist(pos, texture_size).y;
   return Gaus(dst+off,hardScan);}
-  
+
   // Return scanline weight for bloom.
 float BloomScan(float2 pos,float off, float2 texture_size){
   float dst=Dist(pos, texture_size).y;
@@ -210,7 +210,7 @@ float3 Tri(float2 pos, float2 texture_size){
   float wb=Scan(pos, 0.0, texture_size);
   float wc=Scan(pos, 1.0, texture_size);
   return a*wa+b*wb+c*wc;}
-  
+
 // Small bloom.
 float3 Bloom(float2 pos, float2 texture_size){
   float3 a=Horz5(pos,-2.0, texture_size);
@@ -227,11 +227,11 @@ float3 Bloom(float2 pos, float2 texture_size){
 
 // Distortion of scanlines, and end of screen alpha.
 float2 Warp(float2 pos){
-  pos=pos*2.0-1.0;    
+  pos=pos*2.0-1.0;
   pos*=float2(1.0+(pos.y*pos.y)*warp.x,1.0+(pos.x*pos.x)*warp.y);
   return pos*0.5+0.5;}
 
-// Shadow mask 
+// Shadow mask
 float3 Mask(float2 pos){
   float3 mask=float3(maskDark,maskDark,maskDark);
 
@@ -240,14 +240,14 @@ float3 Mask(float2 pos){
     float mask_line = maskLight;
     float odd=0.0;
     if(frac(pos.x/6.0)<0.5) odd = 1.0;
-    if(frac((pos.y+odd)/2.0)<0.5) mask_line = maskDark;  
+    if(frac((pos.y+odd)/2.0)<0.5) mask_line = maskDark;
     pos.x=frac(pos.x/3.0);
-   
+
     if(pos.x<0.333)mask.r=maskLight;
     else if(pos.x<0.666)mask.g=maskLight;
     else mask.b=maskLight;
-    mask *= mask_line;  
-  } 
+    mask *= mask_line;
+  }
 
   // Aperture-grille.
   else if (shadowMask == 2) {
@@ -256,7 +256,7 @@ float3 Mask(float2 pos){
     if(pos.x<0.333)mask.r=maskLight;
     else if(pos.x<0.666)mask.g=maskLight;
     else mask.b=maskLight;
-  } 
+  }
 
   // Stretched VGA style shadow mask (same as prior shaders).
   else if (shadowMask == 3) {
@@ -280,7 +280,7 @@ float3 Mask(float2 pos){
   }
 
   return mask;
-}    
+}
 
 float4 crt_lottes(float2 texture_size, float2 video_size, float2 output_size, float2 tex)
 {

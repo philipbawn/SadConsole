@@ -19,6 +19,7 @@
     <!-- Choose which game host you want to use, monogame, sfml, or fna. -->
     <!-- FNA host requires you to manually add the FNA DLLs -->
     <GameHost>monogame</GameHost>
+    <MonoGamePlatform Condition=" '$(GameHost)' == 'monogame' ">DesktopGL</MonoGamePlatform>
     
     <!-- Some constants for your game that can detect monogame, sfml, or FNA. -->
     <DefineConstants Condition=" '$(GameHost)' == 'monogame' ">$(DefineConstants);MONOGAME</DefineConstants>
@@ -37,7 +38,8 @@
   <!-- MonoGame host requires you to choose which library you want to use. -->
   <!-- If you're using SFML, you don't need to add the sfml library as SadConsole adds it for you. -->
   <ItemGroup Condition=" '$(GameHost)' == 'monogame' ">
-    <PackageReference Include="MonoGame.Framework.Compute.DesktopGL" Version="3.8.3" />
+    <!-- Local project reference to MonoGame compute_shader fork (merged with v3.8.4.1) -->
+    <ProjectReference Include="$(HOME)/git/MonoGame/MonoGame.Framework/MonoGame.Framework.DesktopGL.csproj" />
 
     <!-- If you want to use DirectX, you must set the <TargetFramework> to net10.0-windows and change the MonoGame reference -->
     <!--<PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.4.1" />-->
@@ -47,7 +49,7 @@
     <MonoGameContentReference Include="Content\Assets.mgcb" />
     <None Remove="Content\bin\**\*" />
     <None Remove="Content\obj\**\*" />
-    
+
   </ItemGroup>
 
   <!-- If you're using the FNA host, set this path to the FNA.dll file. -->
