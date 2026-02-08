@@ -7,7 +7,6 @@
     <Nullable>enable</Nullable>
     <RootNamespace>SadConsole.Examples</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-<GameHost>sfml</GameHost>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +18,7 @@
   <PropertyGroup>
     <!-- Choose which game host you want to use, monogame, sfml, or fna. -->
     <!-- FNA host requires you to manually add the FNA DLLs -->
-    <GameHost>monogame</GameHost>
+    <GameHost>sfml</GameHost>
     
     <!-- Some constants for your game that can detect monogame, sfml, or FNA. -->
     <DefineConstants Condition=" '$(GameHost)' == 'monogame' ">$(DefineConstants);MONOGAME</DefineConstants>
